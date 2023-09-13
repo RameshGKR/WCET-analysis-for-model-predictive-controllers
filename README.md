@@ -87,7 +87,7 @@ The license is now available at `localhost:6849`.
 If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, create an empty file at this path and try to save the changes again in the license manager.
 ### Creating a basic RapiTime project
 1. Open RVS Project Manager
-2. Click File $\rightarrow$ New RVS Project
+2. Click File → New RVS Project
 3. Set the project name and target language
 4. Analysis Settings
 	- Analysis Tasks: `timing`
@@ -105,18 +105,18 @@ If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, 
 	- Export Format: txt
 	- Export File: `<project-folder>/rvs_results.txt`
 9. Save Project to project folder
-10. Click Actions $\rightarrow$ Deploy to generate an integration library
+10. Click Actions → Deploy to generate an integration library
 ### Customizations for embedded analysis
 #### Setting up the compiler wrapper
 During the build process, RapiTime will execute the commands specified by the Makefile. However, to analyze the executable calls to the compiler are intercepted by a compiler wrapper. This wrapper is able to analyze the code and insert instrumentation points.
 
 To set up the compiler wrapper to work with the Arm GNU Toolchain the Makefile was modified such that the compiler of choice can be overridden using the command line argument  `CC`. Next, the project was configured to override the compiler with `gcc` and use the `gcc` wrapper around `arm-none-eabi-gcc`.
-1. Click Actions $\rightarrow$ Configure to open the project configuration
-2. Project $\rightarrow$ Environment: add the path to the Arm GNU Toolchain to the path variable
-3. Targets  $\rightarrow$ rpi  $\rightarrow$ Command Line
+1. Click Actions → Configure to open the project configuration
+2. Project → Environment: add the path to the Arm GNU Toolchain to the path variable
+3. Targets → rpi → Command Line
 	- Prepare Command: `make CC=gcc`
 	- Build Command: `make CC=gcc`
-3. Targets  $\rightarrow$ rpi  $\rightarrow$ Compiler Wrapper $\rightarrow$ Add
+3. Targets → rpi → Compiler Wrapper → Add
 	- Wrapper path: `gcc`
 	- Original Tool Path: `arm-none-eabi-gcc`
 #### Customizing the instrumentation library
@@ -128,35 +128,37 @@ Under `<project-folder>/rvs_<project-name>/rvslib-<target>-<analysis>`, RapiTime
 - `RVS_Ipoint(int id)`
   This is the function that is inserted at the start and end of every function to analyze the timing behaviour of the executable. The function is customized to set the ID pins, assert the enable pin and wait for a rising edge on the acknowledge pin.
 
-Because only 14 GPIO pins are used to transfer the ID of the instrumentation points to the logger, RapiTime needs to be configured to only use 14 bits for the instrumentation point IDs. This can be set under Actions $\rightarrow$ Configure $\rightarrow$ Advanced Configuration $\rightarrow$ Analysis List $\rightarrow$ Analysis\[timing\]. There is also the place to set the frequency of the timestamp counter.
+Because only 14 GPIO pins are used to transfer the ID of the instrumentation points to the logger, RapiTime needs to be configured to only use 14 bits for the instrumentation point IDs. This can be set under Actions → Configure → Advanced Configuration → Analysis List → Analysis\[timing\]. There is also the place to set the frequency of the timestamp counter.
 - Transmission bits: `14`
-- Measurement Frequency: `10 000 000`
-- Measurement Units: `seconds`
+- Measurement Frequency: `100 000 000`
+- Measurement Units: `microseconds`
 #### Setting up the run script
 To run and analyze the executable, two scripts need to run at the same time. On the one hand `make run COM=<RPI_COM_PORT>` needs to be run to upload the automatically instrumented executable to the Raspberry Pi and execute it. On the other hand a scripts needs to receive the timestamps from the logger and save them to a file. For this the following steps were taken.
 - Write a script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/get_trace.py`
   The Python script opens a serial port, gathers the timestamps, parses them and stores them to a text file.
 - Write a script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/run.js`
   The run script starts the Python script in the background and starts the execution right after. 
-- Actions $\rightarrow$ Configure $\rightarrow$ Targets $\rightarrow$ rpi $\rightarrow$ Command Line
+- Actions → Configure → Targets → rpi → Command Line
 	- Run Command: `rciscript ${{scripts-folder}}run.js --project ${{project-config-path}} --integration ${{@integration-name}}`
-- Actions $\rightarrow$ Configure $\rightarrow$ Project $\rightarrow$ Environment  $\rightarrow$ Environment Variables
+- Actions → Configure → Project → Environment → Environment Variables
 	- RPI_COM_PORT: `<RPI_COM_PORT>`
 	- FPGA_COM_PORT: `<FPGA_COM_PORT>`
 	- TRACE_FILE: `${{working-folder}}rvs_trace.txt`
-- Actions $\rightarrow$ Configure $\rightarrow$ Integrations $\rightarrow$ rpi-timing  $\rightarrow$ Data Files $\rightarrow$ Add
+- Actions → Configure → Integrations → rpi-timing → Data Files → Add
 	- File Names: `$((TRACE_FILE))`
 	- File Format: trace
 #### Fixing the source map
 During the prepare step, RapiTime analyzes the code and for this the source code is preprocessed. The preprocessed files are stored for later use and the path of the original file for each preprocessed file is stored in an internal database. During the build step, this database is used to use the right files for compilation. Due to a bug in during the prepare step, this relationship between original file and preprocessed file is not saved correctly in the database.
 
-To fix this issue, a Python script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/fix_source_map.py` is added as a post-hook to the prepare step. To configure this the configuration was altered like this: Actions $\rightarrow$ Configure $\rightarrow$ Advanced Configuration $\rightarrow$ Integration List $\rightarrow$ Integration\[rpi-timing\]  $\rightarrow$ Scripts $\rightarrow$ Prepare Posthook: `${{scripts-folder}}fix_source_map.py`.
+To fix this issue, a Python script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/fix_source_map.py` is added as a post-hook to the prepare step. To configure this the configuration was altered like this: Actions → Configure → Advanced Configuration → Integration List → Integration\[rpi-timing\]  → Scripts → Prepare Posthook: `${{scripts-folder}}fix_source_map.py`.
 ### Running the analysis
 1. Connect the Raspberry Pi and FPGA board as shown in the figures above. Do not connect the FPGA board to the PC through a USB hub, as this can result in data loss.
 2. Open device manager to check the serial ports of each device and set the accordingly in the project configuration.
-3. Click Actions $\rightarrow$ Prepare to analyze the code.
+3. Click Actions → Prepare to analyze the code.
 4. Open the Analysis (Experimental) page on the bottom left.
 5. In the Call Tree viewer, right click the main function and click Add Entry Point.
 3. In the Call Tree viewer, look for the function that should be analyzed, right click it and click Add Call Tree Root.
 4. Go back to the project overview.
-5. Click Actions $\rightarrow$ Build & Run to build the code with instrumentation and run it.
+5. Click Actions → Build & Run to build the code with instrumentation and run it.
+
+## Footnotes
