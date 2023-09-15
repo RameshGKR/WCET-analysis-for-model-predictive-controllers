@@ -1,0 +1,374 @@
+<ModelInformation Version="1.0">
+  <Library>
+    <P Name="SavedCharacterEncoding">UTF-8</P>
+    <P Name="LibraryType">BlockLibrary</P>
+    <P Name="ScopeRefreshTime">0.035000</P>
+    <P Name="OverrideScopeRefreshTime">on</P>
+    <P Name="DisableAllScopes">off</P>
+    <P Name="FPTRunName">Run 1</P>
+    <P Name="MaxMDLFileLineLength">120</P>
+    <P Name="LastSavedArchitecture">glnxa64</P>
+    <Object PropName="BdWindowsInfo" ObjectID="1" ClassName="Simulink.BDWindowsInfo">
+      <Object PropName="WindowsInfo" ObjectID="2" ClassName="Simulink.WindowInfo">
+        <P Name="IsActive" Class="logical">1</P>
+        <P Name="Location" Class="double">[569.0, 356.0, 820.0, 548.0]</P>
+        <Object PropName="ModelBrowserInfo" ObjectID="3" ClassName="Simulink.ModelBrowserInfo">
+          <P Name="Visible" Class="logical">0</P>
+          <P Name="DockPosition" Class="char">Left</P>
+          <P Name="Width" Class="int32">50</P>
+          <P Name="Height" Class="int32">50</P>
+          <P Name="Filter" Class="int32">9</P>
+        </Object>
+        <Object PropName="ExplorerBarInfo" ObjectID="4" ClassName="Simulink.ExplorerBarInfo">
+          <P Name="Visible" Class="logical">1</P>
+        </Object>
+        <Object PropName="EditorsInfo" ObjectID="5" ClassName="Simulink.EditorInfo">
+          <P Name="IsActive" Class="logical">1</P>
+          <P Name="ViewObjType" Class="char">SimulinkTopLevel</P>
+          <P Name="LoadSaveID" Class="char">0</P>
+          <P Name="Extents" Class="double">[766.0, 364.0]</P>
+          <P Name="ZoomFactor" Class="double">1.0</P>
+          <P Name="Offset" Class="double">[0.0, 0.0]</P>
+        </Object>
+        <Object PropName="DockComponentsInfo" ObjectID="6" ClassName="Simulink.DockComponentInfo">
+          <P Name="Type" Class="char">GLUE2:PropertyInspector</P>
+          <P Name="ID" Class="char">Property Inspector</P>
+          <P Name="Visible" Class="logical">0</P>
+          <P Name="CreateCallback" Class="char"/>
+          <P Name="UserData" Class="char"/>
+          <P Name="Floating" Class="logical">0</P>
+          <P Name="DockPosition" Class="char">Right</P>
+          <P Name="Width" Class="int32">640</P>
+          <P Name="Height" Class="int32">480</P>
+        </Object>
+        <P Name="WindowState" Class="char">AAAA/wAAAAD9AAAAAgAAAAAAAAC9AAAB+PwCAAAAA/sAAAAWAEQAbwBjAGsAVwBpAGQAZwBlAHQAMwEAAAAxAAAB+AAAAAAAAAAA+wAAABYARABvAGMAawBXAGkAZABnAGUAdAA0AAAAAAD/////AAAAAAAAAAD7AAAAUgBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQAAAAAAP////8AAABeAP///wAAAAEAAAAAAAAAAPwCAAAAAfsAAABUAEcATABVAEUAMgA6AFAAcgBvAHAAZQByAHQAeQBJAG4AcwBwAGUAYwB0AG8AcgAvAFAAcgBvAHAAZQByAHQAeQAgAEkAbgBzAHAAZQBjAHQAbwByAAAAAAD/////AAAAKAD///8AAAMgAAABpgAAAAEAAAACAAAAAQAAAAL8AAAAAQAAAAIAAAAP/////wAAAAAA/////wAAAAAAAAAA/////wEAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAACA/////wAAAAAAAAAA/////wEAAADo/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAAE7/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA</P>
+      </Object>
+    </Object>
+    <ConfigManagerSettings>
+      <P Name="UpdateHistory">UpdateHistoryNever</P>
+      <P Name="ModifiedByFormat">%&lt;Auto&gt;</P>
+      <P Name="ModifiedDateFormat">%&lt;Auto&gt;</P>
+      <P Name="RTWModifiedTimeStamp">547468868</P>
+      <P Name="ModelVersionFormat">1.%&lt;AutoIncrement:1&gt;</P>
+    </ConfigManagerSettings>
+    <EditorSettings>
+      <P Name="SampleTimeColors">off</P>
+      <P Name="SampleTimeAnnotations">off</P>
+      <P Name="LibraryLinkDisplay">disabled</P>
+      <P Name="WideLines">off</P>
+      <P Name="ShowLineDimensions">off</P>
+      <P Name="ShowPortDataTypes">off</P>
+      <P Name="ShowEditTimeErrors">on</P>
+      <P Name="ShowEditTimeWarnings">on</P>
+      <P Name="ShowEditTimeAdvisorChecks">off</P>
+      <P Name="ShowPortUnits">off</P>
+      <P Name="ShowDesignRanges">off</P>
+      <P Name="ShowLoopsOnError">on</P>
+      <P Name="IgnoreBidirectionalLines">off</P>
+      <P Name="ShowStorageClass">off</P>
+      <P Name="ShowTestPointIcons">on</P>
+      <P Name="ShowSignalResolutionIcons">on</P>
+      <P Name="ShowViewerIcons">on</P>
+      <P Name="SortedOrder">off</P>
+      <P Name="VariantCondition">off</P>
+      <P Name="ExecutionContextIcon">off</P>
+      <P Name="ShowLinearizationAnnotations">on</P>
+      <P Name="ShowVisualizeInsertedRTB">on</P>
+      <P Name="ShowMarkup">on</P>
+      <P Name="BlockNameDataTip">off</P>
+      <P Name="BlockParametersDataTip">off</P>
+      <P Name="BlockDescriptionStringDataTip">off</P>
+      <P Name="ToolBar">on</P>
+      <P Name="StatusBar">on</P>
+      <P Name="BrowserShowLibraryLinks">off</P>
+      <P Name="FunctionConnectors">off</P>
+      <P Name="BrowserLookUnderMasks">off</P>
+    </EditorSettings>
+    <SimulationSettings>
+      <P Name="SimulationMode">normal</P>
+      <P Name="PauseTimes">5</P>
+      <P Name="NumberOfSteps">1</P>
+      <P Name="SnapshotBufferSize">10</P>
+      <P Name="SnapshotInterval">10</P>
+      <P Name="NumberOfLastSnapshots">0</P>
+      <P Name="LinearizationMsg">none</P>
+      <P Name="Profile">off</P>
+      <P Name="ParamWorkspaceSource">MATLABWorkspace</P>
+    </SimulationSettings>
+    <ExternalMode>
+      <P Name="ExtModeBatchMode">off</P>
+      <P Name="ExtModeEnableFloating">on</P>
+      <P Name="ExtModeTrigType">manual</P>
+      <P Name="ExtModeTrigMode">normal</P>
+      <P Name="ExtModeTrigPort">1</P>
+      <P Name="ExtModeTrigElement">any</P>
+      <P Name="ExtModeTrigDuration">1000</P>
+      <P Name="ExtModeTrigDurationFloating">auto</P>
+      <P Name="ExtModeTrigHoldOff">0</P>
+      <P Name="ExtModeTrigDelay">0</P>
+      <P Name="ExtModeTrigDirection">rising</P>
+      <P Name="ExtModeTrigLevel">0</P>
+      <P Name="ExtModeArchiveMode">off</P>
+      <P Name="ExtModeAutoIncOneShot">off</P>
+      <P Name="ExtModeIncDirWhenArm">off</P>
+      <P Name="ExtModeAddSuffixToVar">off</P>
+      <P Name="ExtModeWriteAllDataToWs">off</P>
+      <P Name="ExtModeArmWhenConnect">on</P>
+      <P Name="ExtModeSkipDownloadWhenConnect">off</P>
+      <P Name="ExtModeLogAll">on</P>
+      <P Name="ExtModeAutoUpdateStatusClock">on</P>
+    </ExternalMode>
+    <ModelReferenceSettings>
+      <P Name="ShowModelReferenceBlockVersion">off</P>
+      <P Name="ShowModelReferenceBlockIO">off</P>
+    </ModelReferenceSettings>
+    <ConcurrentExecutionSettings>
+      <P Name="ExplicitPartitioning">off</P>
+    </ConcurrentExecutionSettings>
+    <SystemDefaults>
+      <P Name="PaperOrientation">landscape</P>
+      <P Name="PaperPositionMode">auto</P>
+      <P Name="PaperType">usletter</P>
+      <P Name="PaperUnits">inches</P>
+      <P Name="TiledPaperMargins">[0.500000, 0.500000, 0.500000, 0.500000]</P>
+      <P Name="TiledPageScale">1</P>
+      <P Name="ShowPageBoundaries">off</P>
+      <P Name="ModelBrowserVisibility">off</P>
+      <P Name="ModelBrowserWidth">200</P>
+      <P Name="ScreenColor">white</P>
+      <P Name="ZoomFactor">100</P>
+    </SystemDefaults>
+    <BlockDefaults>
+      <P Name="ForegroundColor">black</P>
+      <P Name="BackgroundColor">white</P>
+      <P Name="DropShadow">off</P>
+      <P Name="NamePlacement">normal</P>
+      <P Name="FontName">Helvetica</P>
+      <P Name="FontSize">10</P>
+      <P Name="FontWeight">normal</P>
+      <P Name="FontAngle">normal</P>
+      <P Name="ShowName">on</P>
+      <P Name="BlockRotation">0</P>
+      <P Name="BlockMirror">off</P>
+    </BlockDefaults>
+    <AnnotationDefaults>
+      <P Name="HorizontalAlignment">center</P>
+      <P Name="VerticalAlignment">middle</P>
+      <P Name="ForegroundColor">black</P>
+      <P Name="BackgroundColor">white</P>
+      <P Name="DropShadow">off</P>
+      <P Name="FontName">Helvetica</P>
+      <P Name="FontSize">10</P>
+      <P Name="FontWeight">normal</P>
+      <P Name="FontAngle">normal</P>
+      <P Name="UseDisplayTextAsClickCallback">off</P>
+    </AnnotationDefaults>
+    <LineDefaults>
+      <P Name="FontName">Helvetica</P>
+      <P Name="FontSize">9</P>
+      <P Name="FontWeight">normal</P>
+      <P Name="FontAngle">normal</P>
+    </LineDefaults>
+    <MaskDefaults>
+      <P Name="SelfModifiable">off</P>
+      <P Name="IconFrame">on</P>
+      <P Name="IconOpaque">opaque</P>
+      <P Name="RunInitForIconRedraw">off</P>
+      <P Name="IconRotate">none</P>
+      <P Name="PortRotate">default</P>
+      <P Name="IconUnits">autoscale</P>
+    </MaskDefaults>
+    <MaskParameterDefaults>
+      <P Name="Evaluate">on</P>
+      <P Name="Tunable">on</P>
+      <P Name="NeverSave">off</P>
+      <P Name="Internal">off</P>
+      <P Name="ReadOnly">off</P>
+      <P Name="Enabled">on</P>
+      <P Name="Visible">on</P>
+      <P Name="ToolTip">on</P>
+    </MaskParameterDefaults>
+    <BlockParameterDefaults>
+      <Block BlockType="Constant">
+        <P Name="Value">1</P>
+        <P Name="VectorParams1D">on</P>
+        <P Name="SamplingMode">Sample based</P>
+        <P Name="OutMin">[]</P>
+        <P Name="OutMax">[]</P>
+        <P Name="OutDataTypeStr">Inherit: Inherit from 'Constant value'</P>
+        <P Name="LockScale">off</P>
+        <P Name="SampleTime">inf</P>
+        <P Name="FramePeriod">inf</P>
+        <P Name="PreserveConstantTs">off</P>
+      </Block>
+      <Block BlockType="S-Function">
+        <P Name="FunctionName">system</P>
+        <P Name="SFunctionModules">''</P>
+        <P Name="PortCounts">[]</P>
+      </Block>
+    </BlockParameterDefaults>
+    <System>
+      <P Name="Location">[569, 356, 1389, 904]</P>
+      <P Name="Open">on</P>
+      <P Name="ReportName">simulink-default.rpt</P>
+      <P Name="SIDHighWatermark">16</P>
+      <Block BlockType="S-Function" Name="Block_mpc" SID="1">
+      <P Name="Ports">[5, 3]</P>
+      <P Name="Position">[560, 100, 760, 300]</P>
+      <P Name="ZOrder">7</P>
+      <P Name="FunctionName">mpc_s_function_level2</P>
+      <P Name="SFunctionDeploymentMode">off</P>
+      <P Name="EnableBusSupport">off</P>
+      <P Name="SFcnIsStateOwnerBlock">off</P>
+      <P Name="InitFcn">solver_stats_bus = Simulink.Bus;
+elements = {};
+e = Simulink.BusElement;
+e.Name = 'sqp_stop_crit';
+e.DataType = 'int32';
+elements{end+1} = e;
+e = Simulink.BusElement;
+e.Name = 'n_sqp_iter';
+e.DataType = 'int32';
+elements{end+1} = e;
+e = Simulink.BusElement;
+e.Name = 'n_ls';
+e.DataType = 'int32';
+elements{end+1} = e;
+e = Simulink.BusElement;
+e.Name = 'n_max_ls';
+e.DataType = 'int32';
+elements{end+1} = e;
+e = Simulink.BusElement;
+e.Name = 'n_qp_iter';
+e.DataType = 'int32';
+elements{end+1} = e;
+e = Simulink.BusElement;
+e.Name = 'n_max_qp_iter';
+e.DataType = 'int32';
+elements{end+1} = e;
+e = Simulink.BusElement;
+e.Name = 'runtime';
+e.DataType = 'double';
+elements{end+1} = e;
+solver_stats_bus.Elements = [elements{:}];</P>
+      <Object PropName="MaskObject" ObjectID="8" ClassName="Simulink.Mask">
+        <P Name="Display" Class="char">port_label('input',1,'x_current');
+port_label('input',2,'x_final');
+port_label('input',3,'x_initial_guess');
+port_label('input',4,'u_initial_guess');
+port_label('input',5,'hotstart');
+disp('IMPACT MPC\nmpc');
+port_label('output',1,'x_opt @ k=1');
+port_label('output',2,'u_opt @ k=0');
+port_label('output',3,'solver stats');</P>
+      </Object><P Name="SFunctionModules">'mpc_codegen mpc'</P></Block><Block BlockType="Constant" Name="Constant3" SID="3">
+        <P Name="Position">[430, 105, 460, 135]</P>
+        <P Name="ZOrder">7</P>
+        <P Name="Value">NaN(4,1)</P>
+        <P Name="VectorParams1D">off</P>
+      </Block><Line>
+        <P Name="ZOrder">1</P>
+        <P Name="Src">3#out:1</P>
+        <P Name="Dst">1#in:1</P>
+      </Line><Block BlockType="Constant" Name="Constant4" SID="4">
+        <P Name="Position">[430, 145, 460, 175]</P>
+        <P Name="ZOrder">7</P>
+        <P Name="Value">NaN(4,1)</P>
+        <P Name="VectorParams1D">off</P>
+      </Block><Line>
+        <P Name="ZOrder">1</P>
+        <P Name="Src">4#out:1</P>
+        <P Name="Dst">1#in:2</P>
+      </Line><Block BlockType="Constant" Name="Constant5" SID="5">
+        <P Name="Position">[430, 185, 460, 215]</P>
+        <P Name="ZOrder">7</P>
+        <P Name="Value">NaN(4,51)</P>
+        <P Name="VectorParams1D">off</P>
+      </Block><Line>
+        <P Name="ZOrder">1</P>
+        <P Name="Src">5#out:1</P>
+        <P Name="Dst">1#in:3</P>
+      </Line><Block BlockType="Constant" Name="Constant6" SID="6">
+        <P Name="Position">[430, 225, 460, 255]</P>
+        <P Name="ZOrder">7</P>
+        <P Name="Value">NaN(1,50)</P>
+        <P Name="VectorParams1D">off</P>
+      </Block><Line>
+        <P Name="ZOrder">1</P>
+        <P Name="Src">6#out:1</P>
+        <P Name="Dst">1#in:4</P>
+      </Line><Block BlockType="Constant" Name="Constant7" SID="7">
+        <P Name="Position">[430, 265, 460, 295]</P>
+        <P Name="ZOrder">7</P>
+        <P Name="Value">0</P>
+        <P Name="VectorParams1D">off</P>
+      </Block><Line>
+        <P Name="ZOrder">1</P>
+        <P Name="Src">7#out:1</P>
+        <P Name="Dst">1#in:5</P>
+      </Line><Block BlockType="S-Function" Name="Block_integrate_mpc" SID="8">
+      <P Name="Ports">[3, 1]</P>
+      <P Name="Position">[890, 100, 1090, 220]</P>
+      <P Name="ZOrder">7</P>
+      <P Name="FunctionName">integrate_mpc_s_function_level2</P>
+      <P Name="SFunctionDeploymentMode">off</P>
+      <P Name="EnableBusSupport">off</P>
+      <P Name="SFcnIsStateOwnerBlock">off</P>
+      <P Name="InitFcn"/>
+      <Object PropName="MaskObject" ObjectID="15" ClassName="Simulink.Mask">
+        <P Name="Display" Class="char">port_label('input',1,'x');
+port_label('input',2,'u');
+port_label('input',3,'dt');
+disp('integrate_mpc');
+port_label('output',1,'xf');</P>
+      </Object></Block><Block BlockType="S-Function" Name="Block_dae_mpc" SID="10">
+      <P Name="Ports">[5, 2]</P>
+      <P Name="Position">[1220, 100, 1420, 300]</P>
+      <P Name="ZOrder">7</P>
+      <P Name="FunctionName">dae_mpc_s_function_level2</P>
+      <P Name="SFunctionDeploymentMode">off</P>
+      <P Name="EnableBusSupport">off</P>
+      <P Name="SFcnIsStateOwnerBlock">off</P>
+      <P Name="InitFcn"/>
+      <Object PropName="MaskObject" ObjectID="17" ClassName="Simulink.Mask">
+        <P Name="Display" Class="char">port_label('input',1,'x');
+port_label('input',2,'u');
+port_label('input',3,'z');
+port_label('input',4,'p');
+port_label('input',5,'t');
+disp('dae_mpc');
+port_label('output',1,'ode');
+port_label('output',2,'alg');</P>
+      </Object></Block><Block BlockType="S-Function" Name="Block_grid_mpc" SID="12">
+      <P Name="Ports">[2, 1]</P>
+      <P Name="Position">[1550, 100, 1750, 180]</P>
+      <P Name="ZOrder">7</P>
+      <P Name="FunctionName">grid_mpc_s_function_level2</P>
+      <P Name="SFunctionDeploymentMode">off</P>
+      <P Name="EnableBusSupport">off</P>
+      <P Name="SFcnIsStateOwnerBlock">off</P>
+      <P Name="InitFcn"/>
+      <Object PropName="MaskObject" ObjectID="19" ClassName="Simulink.Mask">
+        <P Name="Display" Class="char">port_label('input',1,'x_current');
+port_label('input',2,'x_final');
+disp('grid_mpc');
+port_label('output',1,'grid');</P>
+      </Object></Block><Block BlockType="S-Function" Name="Block_cost_mpc" SID="14">
+      <P Name="Ports">[4, 1]</P>
+      <P Name="Position">[1880, 100, 2080, 260]</P>
+      <P Name="ZOrder">7</P>
+      <P Name="FunctionName">cost_mpc_s_function_level2</P>
+      <P Name="SFunctionDeploymentMode">off</P>
+      <P Name="EnableBusSupport">off</P>
+      <P Name="SFcnIsStateOwnerBlock">off</P>
+      <P Name="InitFcn"/>
+      <Object PropName="MaskObject" ObjectID="21" ClassName="Simulink.Mask">
+        <P Name="Display" Class="char">port_label('input',1,'x');
+port_label('input',2,'u');
+port_label('input',3,'x_current');
+port_label('input',4,'x_final');
+disp('cost_mpc');
+port_label('output',1,'f');</P>
+      </Object></Block></System>
+  </Library>
+</ModelInformation>

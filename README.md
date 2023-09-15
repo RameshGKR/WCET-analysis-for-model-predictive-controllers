@@ -10,8 +10,11 @@ The project was designed on a Windows machine and expects the following software
 	- IMPACT
 	- PySerial
 - Make for Windows
+	- Download at [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm)
 - Git for Windows
+	- Download at [Git for Windows](https://gitforwindows.org/)
 - ARM GNU Toolchain (arm-none-eabi)
+	- Download at [Arm Developer ](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 - Rapita Verification Suite + USB License key
 - Vivado 2022.1
 
@@ -27,14 +30,14 @@ On the hardware side, the following equipment is required.
 The IMPACT toolchain developed by the MECO group at KU Leuven is a toolchain for nonlinear model predictive control (NMPC) specification, prototyping and deployment. It is built on top of CasADi and Rockit and allows NMPCs to be defined through Python scripts and YAML files. From these definitions it is possible to generate code that can be called from C, Python, MATLAB, and Simulink. For specific solvers (e.g., qrqp) it is possible to generate fully self-contained code without any dependencies on external libraries. [^impact]
 [^impact]: https://gitlab.kuleuven.be/meco-software/impact
 
-In this project, the example of an inverted pendulum on a cart is used. The system model is defined in `model-definition.yaml` and loaded by `generate.py`. This Python script defines the controller and generates C code for it. The qrqp solver is used such that self-contained C code can be generated. The generated code is saved to `src/mpc_build_dir`.
+In this project, the example of an inverted pendulum on a cart is used. The system model is defined in `model-definition.yaml` and loaded by `generate.py`. This Python script defines the controller and generates C code for it. The qrqp solver is used such that self-contained C code can be generated. The generated code is saved to `src/mpc_build_dir`. The main C file `src/main.c` loops over a number of input states defined in `src/input.h` and passes them to the MPC to be solved.
 ## Deploying bare-metal code on Raspberry Pi
 In order to deploy bare-metal code this project uses the Raspberry Pi distribution of Alpha, a system-level GDB server to execute and debug software on Raspberry Pi over a UART connection. [^alpha]
 [^alpha]: https://github.com/farjump/raspberry-pi
 
 To start, an SD card has to be prepared to run the GDB server on the Raspberry Pi.
 1. Format the SD card to the FAT32 file system.
-2. Copy all the files in the `boot` folder to the SD card.
+2. Copy all the files in the `alpha/boot` folder to the SD card.
 3. Insert the SD card into the Raspberry Pi.
 
 Next, the necessary connections have to be made.
@@ -58,7 +61,7 @@ Several methods are suggested by the RapiTime documentation of which one uses th
 
 ![Logger mechanism](./fig/logger_mechanism.svg)
 
-Although the FPGA board has a large buffer capable of storing 16 384 logs and the UART is operating at 9.6 Mb/s, it is possible that the FPGA board is not able to keep up with the Raspberry Pi. To solve this issue, the counter is halted when the buffer is full and the acknowledge signal is held low until logs can be stored again. The Raspberry Pi will wait for the acknowledge signal and thus halt execution as well. An additional measure to prevent incorrect timestamps is the ID parity bit. The odd parity line is set by the Raspberry Pi and used to check the validity of the ID bus. If not valid, the FPGA board waits for the ID bus to settle to a correct value and acknowledges when it has become valid.
+Although the FPGA board has a large buffer capable of storing 16 384 logs and the UART is operating at 9.6 Mb/s, it is possible that the FPGA board is not able to keep up with the Raspberry Pi. To solve this issue, the acknowledge signal is held low until logs can be stored again. The Raspberry Pi will wait for the acknowledge signal and thus halt execution as well. As long as the enable signal is high, the counter will not increment. An additional measure to prevent incorrect timestamps is the ID parity bit. The odd parity line is set by the Raspberry Pi and used to check the validity of the ID bus. If not valid, the FPGA board waits for the ID bus to settle to a correct value and acknowledges when it has become valid.
 
 The code for the timestamp logger is located in the `fpga` folder. To compile and program the Arty-A7 connect it to the PC and run the following commands in the `fpga` folder.
 ```shell
@@ -143,14 +146,32 @@ To run and analyze the executable, two scripts need to run at the same time. On 
 - Actions → Configure → Project → Environment → Environment Variables
 	- RPI_COM_PORT: `<RPI_COM_PORT>`
 	- FPGA_COM_PORT: `<FPGA_COM_PORT>`
-	- TRACE_FILE: `${{working-folder}}rvs_trace.txt`
+	- TRACE_FILE: `${{working-folder}}rvs_trace.bin`
 - Actions → Configure → Integrations → rpi-timing → Data Files → Add
 	- File Names: `$((TRACE_FILE))`
 	- File Format: trace
+
+The Python script to receive the timestamps saves the received bytes to a temporary file as fast as possible. If it detects the message indicating that done was asserted, the script starts to parse the received bytes. During the parse, the CRC and sequence number are checked for any errors. If an error is detected, an exeception is thrown. Otherwise, the ID and timestamp are extracted and written to `rvs_trace.bin` in binary format.
+
+#### Setting up a read filter
+RapiTime includes a domain specific language to define data conversion and filtering. For each data file, a number of converters can be specified that are all executed during the parsing stage. Here, there is a single filter file that uses the RVS read filter to read the binary file, take care of timer overflows and deinstruments the trace. Deinstrumentation is the act of subtracting the instrumentation point overhead from the time between two points. E.g., if there are 6 instrumentation points between two outer points, the overhead of one point can be subtracted 6 times from the time between these two outer points. 
+
+For this, the minimum overhead is specified which is determined by measuring a continuous loop over instrumentation points and getting the minimum time between two points. Run these commands to find the minimum overhead as the 0th percentile.
+```shell
+python rvs_mpc/script-rpi-timing/get_trace.py <FPGA_COM_PORT> rvs_trace.bin
+make run COM=<RPI_COM_PORT>
+python measure_overhead.py
+```
+
+The read filter is located at `rvs_mpc/filters/parse-bin.flt`. To use it I added it to the trace file.
+1. Click Actions → Configure → Integrations → rpi-timing → Data Files → 1.
+2. Add a converter and set the path to the filter file.
+
 #### Fixing the source map
 During the prepare step, RapiTime analyzes the code and for this the source code is preprocessed. The preprocessed files are stored for later use and the path of the original file for each preprocessed file is stored in an internal database. During the build step, this database is used to use the right files for compilation. Due to a bug in during the prepare step, this relationship between original file and preprocessed file is not saved correctly in the database.
 
-To fix this issue, a Python script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/fix_source_map.py` is added as a post-hook to the prepare step. To configure this the configuration was altered like this: Actions → Configure → Advanced Configuration → Integration List → Integration\[rpi-timing\]  → Scripts → Prepare Posthook: `${{scripts-folder}}fix_source_map.py`.
+To fix this issue, a Python script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/fix_source_map.py` is added as a post-hook to the prepare step. To configure this the configuration was altered like this: Actions → Configure → Advanced Configuration → Integration List → Integration\[rpi-timing\]  → Scripts → Prepare Posthook: `${{scripts-folder}}fix_source_map.js`. A second JavaScript file is used to run the Python script. This allows some required variables to be accessed first, and passed to the Python script as command line arguments.
+
 ### Running the analysis
 1. Connect the Raspberry Pi and FPGA board as shown in the figures above. Do not connect the FPGA board to the PC through a USB hub, as this can result in data loss.
 2. Open device manager to check the serial ports of each device and set the accordingly in the project configuration.

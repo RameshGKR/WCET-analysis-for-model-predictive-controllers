@@ -1,0 +1,9 @@
+libmpc_codegen.so: mpc_codegen.c
+	gcc -g -fPIC -shared C:\Users\wardg\UA\IMPACT\mpc_build_dir\mpc_codegen.c -lm -oC:\Users\wardg\UA\IMPACT\mpc_build_dir\libmpc_codegen.so -IC:\Users\wardg\UA\IMPACT\mpc_build_dir -LC:\Users\wardg\UA\IMPACT\mpc_build_dir -Wl,-rpath=C:\Users\wardg\UA\IMPACT\mpc_build_dir -LC:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi -IC:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi\include -Wl,-rpath=C:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi
+
+libmpc.so: mpc.c
+	gcc -g -fPIC -shared C:\Users\wardg\UA\IMPACT\mpc_build_dir\mpc.c -oC:\Users\wardg\UA\IMPACT\mpc_build_dir\libmpc.so -IC:\Users\wardg\UA\IMPACT\mpc_build_dir -LC:\Users\wardg\UA\IMPACT\mpc_build_dir -Wl,-rpath=C:\Users\wardg\UA\IMPACT\mpc_build_dir -LC:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi -IC:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi\include -Wl,-rpath=C:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi -lmpc_codegen -losqp -pedantic -Wall -Wextra -Wno-unknown-pragmas -Wno-long-long -Wno-unused-parameter -Wno-unused-const-variable -Wno-sign-compare -Wno-unused-but-set-variable -Wno-unused-variable -Wno-endif-labels
+
+hello_world_mpc: hello_world_mpc.c
+	gcc -g C:\Users\wardg\UA\IMPACT\mpc_build_dir\hello_world_mpc.c -IC:\Users\wardg\UA\IMPACT\mpc_build_dir -lmpc -o C:\Users\wardg\UA\IMPACT\mpc_build_dir\hello_world_mpc -IC:\Users\wardg\UA\IMPACT\mpc_build_dir -LC:\Users\wardg\UA\IMPACT\mpc_build_dir -Wl,-rpath=C:\Users\wardg\UA\IMPACT\mpc_build_dir -LC:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi -IC:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi\include -Wl,-rpath=C:\Users\wardg\UA\IMPACT\.venv\Lib\site-packages\casadi -lmpc_codegen -losqp -pedantic -Wall -Wextra -Wno-unknown-pragmas -Wno-long-long -Wno-unused-parameter -Wno-unused-const-variable -Wno-sign-compare -Wno-unused-but-set-variable -Wno-unused-variable -Wno-endif-labels
+

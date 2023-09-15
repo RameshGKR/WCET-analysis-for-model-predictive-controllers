@@ -1,0 +1,2 @@
+# Clean everything that can be generated
+file delete -force {*}[glob -nocomplain .Xil proj.xpr *.os *.backup.log *.backup.jou proj.srcs proj.cache proj.runs proj.hw proj.ip_user_files proj.gen out *.jou *.log]

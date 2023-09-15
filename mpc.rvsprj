@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rvsconfig>
+  <version>9</version>
+  <project>
+    <project-name>mpc</project-name>
+    <languages>c</languages>
+    <environment>
+      <path-variable>${{install-path}}bin	$((PATH))	${{install-path}}auxd/rvsenv/bin	${{install-path}}auxd/arm/gnat-gpl2014/bin	${{install-path}}auxd/x86/gnat-gpl2014/bin	C:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.3 rel1\bin</path-variable>
+      <env-variable env-variable-name="RPI_COM_PORT">COM4</env-variable>
+      <env-variable env-variable-name="FPGA_COM_PORT">COM7</env-variable>
+      <env-variable env-variable-name="TRACE_FILE">${{working-folder}}rvs_trace.bin</env-variable>
+    </environment>
+    <integration-recipes/>
+    <data-converters>
+      <converter converter-name="parse">
+        <new-format>txt</new-format>
+      </converter>
+      <converter converter-name="parse-bin">
+        <filter>rvs_mpc/filters/parse-bin.flt</filter>
+      </converter>
+    </data-converters>
+  </project>
+  <integrations>
+    <integration integration-name="rpi-timing">
+      <testing-framework-mode>unmanaged</testing-framework-mode>
+      <integration-pass>dual</integration-pass>
+      <integration-strategy>wrapper</integration-strategy>
+      <analysis-ref>timing</analysis-ref>
+      <export-ref>unmanaged-timing</export-ref>
+      <collection-method>trace</collection-method>
+      <data-files>
+        <data-file>
+          <file-names>$((TRACE_FILE))</file-names>
+          <file-format>trace</file-format>
+          <target-metrics>auto</target-metrics>
+          <converters>parse-bin</converters>
+        </data-file>
+      </data-files>
+      <entry-points>main</entry-points>
+      <aim>Analyze execution time of MPC on Raspberry Pi.</aim>
+      <scripts>
+        <prepare-posthook>${{scripts-folder}}fix_source_map.js</prepare-posthook>
+      </scripts>
+      <target-ref>rpi</target-ref>
+    </integration>
+  </integrations>
+  <analyses>
+    <analysis analysis-name="timing">
+      <analysis-tasks>timing</analysis-tasks>
+      <instr-profile>TIME_FUNCTIONS</instr-profile>
+      <calltree-roots>impact_solve</calltree-roots>
+      <transmission-bits>14</transmission-bits>
+      <measurement-units>microseconds</measurement-units>
+      <measurement-frequency>100000000</measurement-frequency>
+    </analysis>
+  </analyses>
+  <targets>
+    <target target-name="rpi">
+      <commandlines>
+        <clean-commandline>make clean</clean-commandline>
+        <prepare-commandline>make CC=gcc</prepare-commandline>
+        <build-commandline>make CC=gcc</build-commandline>
+        <run-commandline>rciscript ${{scripts-folder}}run.js --project ${{project-config-path}} --integration ${{@integration-name}}</run-commandline>
+        <working-folder>./</working-folder>
+      </commandlines>
+      <instrumentation>
+        <c/>
+      </instrumentation>
+      <compiler-wrapper>
+        <wrapper wrapper-name="gcc">
+          <path-to-original>arm-none-eabi-gcc</path-to-original>
+        </wrapper>
+      </compiler-wrapper>
+      <description>A Raspberry Pi with the Alpha GDB stub loaded onto the SD card.</description>
+    </target>
+  </targets>
+  <exports>
+    <export export-name="unmanaged-timing">
+      <export-section>
+        <metric>time</metric>
+        <export-format>txt</export-format>
+      </export-section>
+    </export>
+  </exports>
+</rvsconfig>

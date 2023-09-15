@@ -1,0 +1,43 @@
+
+# Get all the 'main' functions in the system
+set MainNames ric.get_values("//entry-points");
+
+# Loop through all entry points (usually only one)
+# For each, gut and call RVS_RTS_Execute()
+for mainname MainNames {
+  set MainCode varman.find_first mainname
+  print("Injecting init and output into " mainname " (" MainCode ")")
+  if MainCode {
+    # Some 'main' exists
+    # In order to run tests, gut the body of this
+    # Then call the test framework from in here and exit
+    append.unique.at MainCode.body_loc.head [::
+    {
+      RVS_Init();
+    ::]
+    for retpt MainCode.stmnt.find_img "stmnt_return" {
+      append.unique.at retpt.loc.all_loc.head [::
+        { RVS_Output();
+      ::]
+      append.unique.at retpt.loc.all_loc.tail [::
+        }
+      ::]
+    }
+    else {
+      append.unique.at MainCode.all_loc.tail [::
+      { 
+        RVS_Output(); 
+      }
+      ::]
+    }
+    append.unique.at MainCode.all_loc.tail [::
+    }
+    ::]
+  }
+  else {
+    error [::Could not find [[mainname]] while injecting RVS_Init() during harness creation. Please resolve by specifying entry-points in the RVS project.::]
+  }
+}
+else {
+  print( "No entry-point specified for test harness injection");
+}

@@ -1,0 +1,9 @@
+# Two bytes for ID, four bytes for timestamp
+read.byte_reader("B0 B1", "B2 B3 B4 B5");
+
+# Fix wrap-arounds of the 32-bit timestamp counter
+read.wrap(32);
+
+# Subtract overhead due to timestamps
+# The minimum overhead is the minimum time between Ipoints in a continuous loop of Ipoints.
+read.deinstrument(61);
