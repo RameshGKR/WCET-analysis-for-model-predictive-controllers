@@ -1,6 +1,6 @@
 # WCET analysis of MPC deployed on Raspberry PI using RapiTime
 
-This project contains all tools and information to perform WCET analysis of model predictive controllers (MPCs) deployed on a Raspberry Pi. The MPC is defined using the IMPACT toolchain which is also used to generate self-contained C code. The generated code provides a library of functions to use the MPC from a C application. A small C application iterates over a series of input states for which the MPC is solved. This application is then analyzed by RapiTime with static analysis and time measurement during execution on a Raspberry Pi.
+This project contains all tools and information to perform WCET analysis of model predictive controllers (MPCs) deployed on a Raspberry Pi. The properties of the MPC are defined using the IMPACT toolchain which is also used to generate self-contained C code. The generated code provides a library of functions to use the MPC from a C application. A small C application (i.e., `src/main.c`) iterates over a series of input states for which the optimal control problem is solved. This application is then analyzed by RapiTime with static analysis and time measurement during execution on a Raspberry Pi.
 
 ![System architecture](./fig/system_architecture.svg)
 ## Requirements
@@ -14,30 +14,32 @@ The project was designed on a Windows machine and expects the following software
 - Git for Windows
 	- Download at [Git for Windows](https://gitforwindows.org/)
 - ARM GNU Toolchain (arm-none-eabi)
-	- Download at [Arm Developer ](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
+	- Download at [Arm Developer Hub](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 - Rapita Verification Suite + USB License key
-- Vivado 2022.1
+- Vivado 2022.1 (only needed to reflash the board)
 
 On the hardware side, the following equipment is required.
 - Raspberry Pi 3B
 - Micro SD card of at least 4 GB
 - Micro USB power supply capable of delivering 12.5 W
 - USB to UART adapter for 3V3 logic levels
-- 19 female to male jumper wires
+- 20 female to male jumper wires
 - Arty-A7-35 FPGA development board
 - Micro USB to USB cable
+
 ## Generating self-contained code for MPC
 The IMPACT toolchain developed by the MECO group at KU Leuven is a toolchain for nonlinear model predictive control (NMPC) specification, prototyping and deployment. It is built on top of CasADi and Rockit and allows NMPCs to be defined through Python scripts and YAML files. From these definitions it is possible to generate code that can be called from C, Python, MATLAB, and Simulink. For specific solvers (e.g., qrqp) it is possible to generate fully self-contained code without any dependencies on external libraries. [^impact]
 [^impact]: https://gitlab.kuleuven.be/meco-software/impact
 
 In this project, the example of an inverted pendulum on a cart is used. The system model is defined in `model-definition.yaml` and loaded by `generate.py`. This Python script defines the controller and generates C code for it. The qrqp solver is used such that self-contained C code can be generated. The generated code is saved to `src/mpc_build_dir`. The main C file `src/main.c` loops over a number of input states defined in `src/input.h` and passes them to the MPC to be solved.
+
 ## Deploying bare-metal code on Raspberry Pi
 In order to deploy bare-metal code this project uses the Raspberry Pi distribution of Alpha, a system-level GDB server to execute and debug software on Raspberry Pi over a UART connection. [^alpha]
 [^alpha]: https://github.com/farjump/raspberry-pi
 
 To start, an SD card has to be prepared to run the GDB server on the Raspberry Pi.
 1. Format the SD card to the FAT32 file system.
-2. Copy all the files in the `alpha/boot` folder to the SD card.
+2. Copy all the files in `alpha/boot` to the SD card.
 3. Insert the SD card into the Raspberry Pi.
 
 Next, the necessary connections have to be made.
@@ -49,7 +51,7 @@ The C code is compiled for bare-metal execution on the Raspberry Pi using the Ar
 2. Ensure that the `arm-none-eabi` toolchain and Make for Windows are on the PATH variable.
 3. Run `make` to compile.
 
-The last step is to load the executable onto the Raspberry Pi and execute it. This step is scripted using the provided Makefile as well. First, a Python script is executed that increases the baud rate of the GDB server from 115200 to 921600. This script was found on [iosoft.blog](https://iosoft.blog/2020/03/07/raspberry-pi-bare-metal-alpha/)and speeds up the upload process of the executable significantly. Next, the GDB client `arm-none-eabi-gdb` is started to run the GDB script `run.gdb`. This second script connects to the Raspberry Pi, uploads the executable, and starts the execution.
+The last step is to load the executable onto the Raspberry Pi and execute it. This step is scripted using the provided Makefile as well. First, a Python script `increase_baud.py` is executed that increases the baud rate of the GDB server from 115200 to 921600. This script was found on [iosoft.blog](https://iosoft.blog/2020/03/07/raspberry-pi-bare-metal-alpha/)and speeds up the upload process of the executable significantly. Next, the GDB client `arm-none-eabi-gdb` is started to run the GDB script `run.gdb`. This second script connects to the Raspberry Pi, uploads the executable, and starts the execution.
 
 ```shell
 make run COM=<RPI_COM_PORT>
@@ -61,7 +63,7 @@ Several methods are suggested by the RapiTime documentation of which one uses th
 
 ![Logger mechanism](./fig/logger_mechanism.svg)
 
-Although the FPGA board has a large buffer capable of storing 16 384 logs and the UART is operating at 9.6 Mb/s, it is possible that the FPGA board is not able to keep up with the Raspberry Pi. To solve this issue, the acknowledge signal is held low until logs can be stored again. The Raspberry Pi will wait for the acknowledge signal and thus halt execution as well. As long as the enable signal is high, the counter will not increment. An additional measure to prevent incorrect timestamps is the ID parity bit. The odd parity line is set by the Raspberry Pi and used to check the validity of the ID bus. If not valid, the FPGA board waits for the ID bus to settle to a correct value and acknowledges when it has become valid.
+Although the FPGA board has a large buffer capable of storing 16 384 logs and the UART is operating at 12 Mbaud, it is possible that the FPGA board is not able to keep up with the Raspberry Pi. To solve this issue, the acknowledge signal is held low until logs can be stored again. The Raspberry Pi will wait for the acknowledge signal and thus halt execution as well. As long as the enable signal is high, the counter will not increment. An additional measure to prevent incorrect timestamps is the ID parity bit. The odd parity line is set by the Raspberry Pi and used to check the validity of the ID bus. If not valid, the FPGA board waits for the ID bus to settle to a correct value and acknowledges when it has become valid.
 
 The code for the timestamp logger is located in the `fpga` folder. To compile and program the Arty-A7 connect it to the PC and run the following commands in the `fpga` folder.
 ```shell
@@ -70,11 +72,13 @@ vivado -mode batch -source program_spi.tcl
 vivado -mode batch -source clean.tcl
 ```
 After programming, press the `PROG` button on the board to load the configuration from the SPI flash to the FPGA.
-## Connection diagram
 
+## Connection diagram
 ![Connection diagram](./fig/connection_diagram.svg)
+
 ## Analysis with RapiTime
 The RVS project has been completely set up to analyze the executable we deployed on the Raspberry Pi. Except for some environment variables that specify the serial ports of the Raspberry Pi and the FPGA board, no changes should be made to the configuration to analyze the provided code.
+
 ### Setting up the license
 1. Plug in the USB license key
 2. Open RVS License Server Control Panel
@@ -88,6 +92,7 @@ The license is now available at `localhost:6849`.
 3. Save the changes and refresh
 
 If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, create an empty file at this path and try to save the changes again in the license manager.
+
 ### Creating a basic RapiTime project
 1. Open RVS Project Manager
 2. Click File → New RVS Project
@@ -109,6 +114,7 @@ If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, 
 	- Export File: `<project-folder>/rvs_results.txt`
 9. Save Project to project folder
 10. Click Actions → Deploy to generate an integration library
+
 ### Customizations for embedded analysis
 #### Setting up the compiler wrapper
 During the build process, RapiTime will execute the commands specified by the Makefile. However, to analyze the executable calls to the compiler are intercepted by a compiler wrapper. This wrapper is able to analyze the code and insert instrumentation points.
@@ -122,6 +128,7 @@ To set up the compiler wrapper to work with the Arm GNU Toolchain the Makefile w
 3. Targets → rpi → Compiler Wrapper → Add
 	- Wrapper path: `gcc`
 	- Original Tool Path: `arm-none-eabi-gcc`
+
 #### Customizing the instrumentation library
 Under `<project-folder>/rvs_<project-name>/rvslib-<target>-<analysis>`, RapiTime stores the instrumentation code that is inserted. The default library is written for x86 architectures and writes the processor cycle counter to a file on every instrumentation point. Three functions need to be customized in `rvs.c` to use the GPIO pins for instrumentation.
 - `RVS_Init()`
@@ -135,6 +142,7 @@ Because only 14 GPIO pins are used to transfer the ID of the instrumentation poi
 - Transmission bits: `14`
 - Measurement Frequency: `100 000 000`
 - Measurement Units: `microseconds`
+
 #### Setting up the run script
 To run and analyze the executable, two scripts need to run at the same time. On the one hand `make run COM=<RPI_COM_PORT>` needs to be run to upload the automatically instrumented executable to the Raspberry Pi and execute it. On the other hand a scripts needs to receive the timestamps from the logger and save them to a file. For this the following steps were taken.
 - Write a script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/get_trace.py`
