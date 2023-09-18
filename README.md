@@ -4,7 +4,7 @@ This project contains all tools and information to perform WCET analysis of mode
 
 ![System architecture](./fig/system_architecture.svg)
 ## Requirements
-The project was designed on a Windows machine and expects the following software to be installed.
+The project was created on a Windows machine and expects the following software to be installed.
 - Python
 	- Numpy
 	- IMPACT
@@ -15,6 +15,8 @@ The project was designed on a Windows machine and expects the following software
 	- Download at [Git for Windows](https://gitforwindows.org/)
 - ARM GNU Toolchain (arm-none-eabi)
 	- Download at [Arm Developer Hub](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
+- FTDI Virtual COM Port drivers
+	- Download at [FTDI VCP Drivers](https://ftdichip.com/drivers/vcp-drivers/)
 - Rapita Verification Suite + USB License key
 - Vivado 2022.1 (only needed to reflash the board)
 
@@ -31,7 +33,7 @@ On the hardware side, the following equipment is required.
 The IMPACT toolchain developed by the MECO group at KU Leuven is a toolchain for nonlinear model predictive control (NMPC) specification, prototyping and deployment. It is built on top of CasADi and Rockit and allows NMPCs to be defined through Python scripts and YAML files. From these definitions it is possible to generate code that can be called from C, Python, MATLAB, and Simulink. For specific solvers (e.g., qrqp) it is possible to generate fully self-contained code without any dependencies on external libraries. [^impact]
 [^impact]: https://gitlab.kuleuven.be/meco-software/impact
 
-In this project, the example of an inverted pendulum on a cart is used. The system model is defined in `model-definition.yaml` and loaded by `generate.py`. This Python script defines the controller and generates C code for it. The qrqp solver is used such that self-contained C code can be generated. The generated code is saved to `src/mpc_build_dir`. The main C file `src/main.c` loops over a number of input states defined in `src/input.h` and passes them to the MPC to be solved.
+In this project, the example of an inverted pendulum on a cart is used. The system model is defined in `model-definition.yaml` and loaded by `generate.py`. This Python script defines the properties of the controller and generates C code for it. The qrqp solver is used such that self-contained C code can be generated. The generated code is saved to `src/mpc_build_dir`. The main C file `src/main.c` loops over a number of input states defined in `src/input.h` and passes them to the MPC to be solved.
 
 ## Deploying bare-metal code on Raspberry Pi
 In order to deploy bare-metal code this project uses the Raspberry Pi distribution of Alpha, a system-level GDB server to execute and debug software on Raspberry Pi over a UART connection. [^alpha]
