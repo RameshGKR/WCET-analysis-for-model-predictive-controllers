@@ -62,6 +62,7 @@
 #include "rvs_ipoint.h"
 #include "gpio_defs.h"
 
+/* Number of times a value should be correct before continuing */
 #define POLL_COUNT 3
 
 /**************************************************************
@@ -92,24 +93,24 @@ void RVS_Ipoint(unsigned int id)
 {
   volatile uint32_t* reg;
 
-  /* Assert GPIO 23 (enable) and set GPIO 0-13 to ID, GPIO 16 to ID parity */
+  /* Assert enable (GPIO 23) and set ID (GPIO 0-13) + odd parity (GPIO 16) */
   reg = (uint32_t*) GPIO_CLR0;
   *reg = GPIO_MASK_16 | GPIO_MASK_13_0;
   reg = (uint32_t*) GPIO_SET0;
   *reg = GPIO_MASK_23 | (__builtin_parity(GPIO_MASK_13_0 & id) << 16) | (GPIO_MASK_13_0 & id);
 
-  /* Wait for high GPIO 26 (ack) */
+  /* Poll for acknowledge (GPIO 26) assert */
   reg = (uint32_t*) GPIO_LEV0;
   for (int i = 0; i < POLL_COUNT-1; i++)
   {
     if (!(*reg & GPIO_MASK_26)) i = 0;
   }
 
-  /* Clear GPIO 23 (enable) */
+  /* Clear enable (GPIO 23) */
   reg = (uint32_t*) GPIO_CLR0;
   *reg = GPIO_MASK_23;
 
-  /* Wait until GPIO 26 (ack) is low */
+  /* Poll for acknowledge (GPIO 26) clear */
   reg = (uint32_t*) GPIO_LEV0;
   for (int i = 0; i < POLL_COUNT-1; i++)
   {
@@ -124,7 +125,8 @@ void RVS_Init (void)
 {
   volatile uint32_t* reg;
 
-  /* Set GPIO 0-13 & 16 & 23-25 as output pins */
+  /* CONFIGURE AND INITIALIZE GPIO */
+  /* Configure GPIO 0-13 & 16 & 23-25 as output */
   for (int i = 0; i <= 13; i++)
   {
       gpio_fsel(i, GPIO_FSEL_OUT);
@@ -134,31 +136,30 @@ void RVS_Init (void)
   gpio_fsel(24, GPIO_FSEL_OUT);
   gpio_fsel(25, GPIO_FSEL_OUT);
 
-  /* Set GPIO 26 as input, enable asynchronous rising edge detection */
+  /* Configure GPIO 26 as input */
   gpio_fsel(26, GPIO_FSEL_IN);
 
-  /* Set GPIO 0-13 & 16 & 23-25 low */
+  /* Initialize GPIO 0-13 & 16 & 23-25 low */
   reg = (uint32_t *) GPIO_CLR0;
-  *reg = GPIO_MASK_13_0 | GPIO_MASK_16 | GPIO_MASK_23 | GPIO_MASK_24 | GPIO_MASK_25;
+  *reg = GPIO_MASK_25 | GPIO_MASK_24 | GPIO_MASK_23 | GPIO_MASK_16 | GPIO_MASK_13_0;
 
-  /* Assert GPIO 24 to reset counter
-   * Assert GPIO 23 to enable bus
-   */
+  /* RESET COUNTER */
+  /* Assert reset (GPIO 24) and enable (GPIO 23) */
   reg = (uint32_t *) GPIO_SET0;
-  *reg = GPIO_MASK_23 | GPIO_MASK_24;
+  *reg = GPIO_MASK_24 | GPIO_MASK_23;
 
-  /* Wait for high GPIO 26 (ack) */
+  /* Poll for acknowledge (GPIO 26) assert */
   reg = (uint32_t*) GPIO_LEV0;
   for (int i = 0; i < POLL_COUNT-1; i++)
   {
     if (!(*reg & GPIO_MASK_26)) i = 0;
   }
 
-  /* Deassert reset and enable */
+  /* Clear enable (GPIO23) and reset (GPIO 24) */
   reg = (uint32_t*) GPIO_CLR0;
   *reg = GPIO_MASK_24 | GPIO_MASK_23;
 
-  /* Wait for low GPIO 26 (ack) */
+  /* Poll for acknowledge (GPIO 26) clear */
   reg = (uint32_t*) GPIO_LEV0;
   for (int i = 0; i < POLL_COUNT-1; i++)
   {
@@ -173,24 +174,22 @@ void RVS_Output (void)
 {
   volatile uint32_t* reg;
 
-  /* Assert GPIO 25 to indicate done
-   * Assert GPIO 23 to enable bus
-   */
+  /* Assert enable (GPIO 23) and done (GPIO 25) */
   reg = (uint32_t *) GPIO_SET0;
-  *reg = GPIO_MASK_23 | GPIO_MASK_25;
+  *reg = GPIO_MASK_25 | GPIO_MASK_23;
 
-  /* Wait for high GPIO 26 (ack) */
+  /* Poll for acknowledge (GPIO 26) assert */
   reg = (uint32_t*) GPIO_LEV0;
   for (int i = 0; i < POLL_COUNT-1; i++)
   {
     if (!(*reg & GPIO_MASK_26)) i = 0;
   }
 
-  /* Deassert done */
+  /* Clear enable (GPIO 23) and done (GPIO 25) */
   reg = (uint32_t *) GPIO_CLR0;
-  *reg = GPIO_MASK_23 | GPIO_MASK_25;
+  *reg = GPIO_MASK_25 | GPIO_MASK_23;
 
-  /* Wait for low GPIO 26 (ack) */
+  /* Poll for acknowledge (GPIO 26) clear */
   reg = (uint32_t*) GPIO_LEV0;
   for (int i = 0; i < POLL_COUNT-1; i++)
   {
