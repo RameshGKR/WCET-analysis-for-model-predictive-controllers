@@ -89,7 +89,17 @@ if __name__ == "__main__":
     receive(port=COM_PORT, rxfile=rxfile)
 
     binfile = open(TRACE_FILE, 'wb')
-    parse(rxfile=rxfile, binfile=binfile)
+    try:
+        parse(rxfile=rxfile, binfile=binfile)
+    except:
+        # Store temporary rxfile for debugging
+        fullbinfile = open(os.path.join(os.path.dirname(TRACE_FILE), "full_trace.bin"), 'wb')
+        while True:
+            copy_buffer = rxfile.read(1024*1024)
+            if not copy_buffer:
+                break
+            fullbinfile.write(copy_buffer)
+        fullbinfile.close()
 
     rxfile.close()
     binfile.close()
