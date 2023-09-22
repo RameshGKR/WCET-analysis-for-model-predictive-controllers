@@ -95,7 +95,7 @@ The license is now available at `localhost:6849`.
     - Port: `6849`
 3. Save the changes and refresh
 
-If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, create an empty file at this path and try to save the changes again in the license manager.
+If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, create an empty file at this path and repeat the steps above.
 
 ### Creating a basic RapiTime project
 1. Open RVS Project Manager
@@ -121,9 +121,9 @@ If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, 
 
 ### Customizations for embedded analysis
 #### Setting up the compiler wrapper
-During the build process, RapiTime will execute the commands specified by the Makefile. However, to analyze the executable calls to the compiler are intercepted by a compiler wrapper. This wrapper is able to analyze the code and insert instrumentation points.
+During the build process, RapiTime will execute the commands specified by the Makefile. However, to analyze the executable, calls to the compiler are intercepted by a compiler wrapper. This wrapper is able to analyze the code and insert instrumentation points.
 
-To set up the compiler wrapper to work with the Arm GNU Toolchain the Makefile was modified such that the compiler of choice can be overridden using the command line argument  `CC`. Next, the project was configured to override the compiler with `gcc` and use the `gcc` wrapper around `arm-none-eabi-gcc`.
+To set up the compiler wrapper to work with the Arm GNU Toolchain the Makefile was modified such that the compiler of choice can be overridden using the command line argument  `CC`. Next, the project was configured to override the compiler with `gcc` and use the `gcc` wrapper around the Arm GNU toolchain compiler called `arm-none-eabi-gcc`.
 1. Click Actions → Configure to open the project configuration
 2. Project → Environment: add the path to the Arm GNU Toolchain to the path variable
 3. Targets → rpi → Command Line
@@ -148,7 +148,7 @@ Because only 14 GPIO pins are used to transfer the ID of the instrumentation poi
 - Measurement Units: `microseconds`
 
 #### Setting up the run script
-To run and analyze the executable, two scripts need to run at the same time. On the one hand `make run COM=<RPI_COM_PORT>` needs to be run to upload the automatically instrumented executable to the Raspberry Pi and execute it. On the other hand, a script needs to receive the timestamps from the logger and save them to a file. For this, the following steps were taken.
+To run and analyze the executable, two scripts need to run at the same time. On the one hand `make run COM=<RPI_COM_PORT>` needs to be run to upload the instrumented executable to the Raspberry Pi and execute it. On the other hand, a script needs to receive the timestamps from the logger and save them to a file. For this, the following steps were taken.
 - Write a script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/get_trace.py`
   The Python script opens a serial port, gathers the timestamps, parses them, and stores them in a text file.
 - Write a script `<project-folder>/rvs_<project-name>/scripts-<target>-<analysis>/run.js`
