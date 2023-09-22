@@ -121,7 +121,7 @@ If you get an error `File does not exist: C:\ProgramData\rapita\rvsconfig.ini`, 
 10. Click Actions → Deploy to generate an integration library
 
 ### Customizations for embedded analysis
-*ALL THESE CUSTOMIZATIONS ARE SET UP TO WORK AS
+*ALL THESE CUSTOMIZATIONS ARE SET UP ALREADY, THIS SECTION IS ONLY TO HERE TO EXPLAIN HOW IT WORKS*
 #### Setting up the compiler wrapper
 During the build process, RapiTime will execute the commands specified by the Makefile. However, to analyze the executable, calls to the compiler are intercepted by a compiler wrapper. This wrapper is able to analyze the code and insert instrumentation points.
 
