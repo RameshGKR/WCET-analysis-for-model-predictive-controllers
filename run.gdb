@@ -1,15 +1,14 @@
+# Get settings required to deploy to Raspberry Pi with Alpha
 source alpha/alpha.gdb
 
 # Connect to the RPi
 set serial baud 921600
 source connect_serial.gdb
 
-# Load the executable in the target
-# By default, the loaded file is the one GDB debugs, given as argument
-# to gdb or using the command file.
+# Load the executable to the target
 load
 
-# Quit on SIGTRAP
+# Quit on SIGTRAP (by default at end of executable)
 catch signal SIGTRAP
 commands
     quit
