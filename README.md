@@ -8,6 +8,7 @@ This project contains all the tools and information to perform WCET analysis of 
 The project was created on a Windows machine and expects the following software to be installed.
 - Python
     - Numpy
+    - Numba
     - IMPACT
     - PySerial
 - Make for Windows
@@ -168,11 +169,21 @@ The Python script to receive the timestamps saves the received bytes to a tempor
 #### Setting up a read filter
 RapiTime includes a domain-specific language to define data conversion and filtering. For each data file, a number of converters can be specified that are all executed during the parsing stage. Here, there is a single filter file that uses the RVS read filter to read the binary file, take care of timer overflows, and deinstruments the trace. Deinstrumentation is the act of subtracting the instrumentation point overhead from the time between two points. For example, if there are 6 instrumentation points between two outer points, the overhead of one point can be subtracted 6 times from the time between these two outer points. 
 
-For this, the minimum overhead is specified which is determined by measuring a continuous loop over instrumentation points and getting the minimum time between two points. Run these commands to find the minimum overhead as the 0th percentile.
+For this, the minimum overhead is specified which is determined by measuring a continuous loop over instrumentation points and getting the minimum time between two points. Run these commands to find the minimum overhead.
+
+The first command starts a script to connect to the FPGA and receive the timestamps. The results are saved to `rvs_trace.bin`.
 ```shell
 python rvs_mpc/script-rpi-timing/get_trace.py <FPGA_COM_PORT> rvs_trace.bin
-make run COM=<RPI_COM_PORT>
-python measure_overhead.py
+```
+
+The second command should be executed in a separate terminal window. This command compiles and executes a test executable that loops over some instrumentation points.
+```shell
+make test COM=<RPI_COM_PORT>
+```
+
+When both commands have finished, the timestamps can be extracted form the file. The script calculates some statistics about the overhead and outputs them to the terminal.
+```shell
+python measure_overhead.py rvs_trace.bin
 ```
 
 The read filter is located at `rvs_mpc/filters/parse-bin.flt`. To use it I added it to the trace file.

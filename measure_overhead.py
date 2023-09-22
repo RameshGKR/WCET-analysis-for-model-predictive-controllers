@@ -27,6 +27,7 @@ if __name__ == "__main__":
     overhead = np.diff(timestamps)
     print(f"Average: {np.mean(overhead)}")
     print(f"Percentiles: {np.percentile(overhead, [p for p in range(0, 100+10, 10)])}")
+    print(f"Minimum: {np.min(overhead}")
 
 
 

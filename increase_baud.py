@@ -101,4 +101,10 @@ if __name__ == "__main__":
         print("Target system responding OK")
         time.sleep(0.01)
     else:
-        raise Exception("No response from target system")
+        raise Exception("""
+        No response from target system!
+          - Is the Raspberry Pi plugged in?
+          - Is the USB-UART adapter connected correctly?
+          - Are the Alpha boot files on the SD card?
+          - Did you specify the correct COM port?
+        """)
